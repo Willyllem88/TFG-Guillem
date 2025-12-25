@@ -15,9 +15,9 @@ def get_example_instance():
     Parameters are based on Example 1 from the source literature.
     """
     # Define request, pickup, and delivery sets
-    requests = [1, 2, 3] # R = {1, 2, 3}
-    pickups = [f"{r}+" for r in requests] # P = {1+, 2+, 3+}
-    deliveries = [f"{r}-" for r in requests] # D = {1-, 2-, 3-}
+    requests = [1, 2, 3, 4, 5] # R = {1, 2, 3, 4, 5}
+    pickups = [f"{r}+" for r in requests] # P = {1+, 2+, 3+, 4+, 5+}
+    deliveries = [f"{r}-" for r in requests] # D = {1-, 2-, 3-, 4-, 5-}
     nodes = pickups + deliveries
     all_nodes = ['0_start'] + nodes + ['0_end']
 
@@ -56,7 +56,7 @@ def get_example_instance():
         },
         'max_ride_time': {r: 100 for r in requests}, # L_i = 100
         'capacity': 3,  # Q = 3
-        'vehicles': 1   # K = 1
+        'vehicles': 2   # K = 1
     }
     return data
 

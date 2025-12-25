@@ -73,6 +73,10 @@ class DARPModelLB:
         # Binary variable x[i,j] is 1 if a vehicle drives directly from i to j.
         m.A = Set(initialize=[(i, j) for i in m.J for j in m.J 
                              if i != j and i != '0_end' and j != '0_start'])
+        
+        # --- S Sets for Constraint (1e) ---
+        s_sets = self._generate_s_sets()
+        m.S_Indices = Set(initialize=range(len(s_sets)))
 
         # --- Parameters ---
         m.c = Param(m.J, m.J, initialize=self.data['costs']) # Routing costs 
@@ -84,6 +88,7 @@ class DARPModelLB:
         m.L = Param(m.Requests, initialize=self.data['max_ride_time']) # Max ride time 
         m.Q_max = Param(initialize=self.data['capacity']) # Vehicle capacity 
         m.K = Param(initialize=self.data['vehicles']) # Number of vehicles 
+        m.S_Sets = Param(m.S_Indices, initialize={idx: val for idx, val in enumerate(s_sets)}) # S sets
 
         # --- Variables ---
         m.x = Var(m.A, domain=Binary) # Sequence variables 
@@ -114,10 +119,6 @@ class DARPModelLB:
 
         # (1e) - Pairing and Precedence
         # Ensures pickup and delivery are in the same tour in the correct order.
-        s_sets = self._generate_s_sets()
-        m.S_Indices = Set(initialize=range(len(s_sets)))
-        m.S_Sets = Param(m.S_Indices, initialize={idx: val for idx, val in enumerate(s_sets)})
-
         @m.Constraint(m.S_Indices)
         def precedence_pairing(m_in, idx):
             S = m_in.S_Sets[idx]
@@ -220,7 +221,7 @@ class DARPModelLB:
             for idx in range(len(info['route']) - 1):
                 print(f"  From {info['route'][idx]} to {info['route'][idx + 1]} | "
                       f"Depart: {info['times'][idx]:.2f}, Arrive: {info['times'][idx + 1]:.2f}, "
-                      f"Load after: {info['loads'][idx + 1]:.2f}")
+                      f"Load after: {int(info['loads'][idx + 1])}")
             print("")
 
    
