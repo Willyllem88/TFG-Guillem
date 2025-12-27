@@ -15,7 +15,7 @@ def get_example_instance():
     Parameters are based on Example 1 from the source literature.
     """
     # Define request, pickup, and delivery sets
-    requests = [1, 2, 3, 4, 5] # R = {1, 2, 3, 4, 5}
+    requests = [1, 2, 3, 4] # R = {1, 2, 3, 4, 5}
     pickups = [f"{r}+" for r in requests] # P = {1+, 2+, 3+, 4+, 5+}
     deliveries = [f"{r}-" for r in requests] # D = {1-, 2-, 3-, 4-, 5-}
     nodes = pickups + deliveries
